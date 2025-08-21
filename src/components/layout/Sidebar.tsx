@@ -11,7 +11,8 @@ import {
   ChevronRight,
   ChevronDown,
   Menu,
-  X
+  X,
+  UserCheck
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -59,6 +60,19 @@ const menuItems = [
       { title: "Clientes", path: "/crm/clientes" },
       { title: "Vendas", path: "/crm/vendas" },
       { title: "Pipeline", path: "/crm/pipeline" },
+    ],
+  },
+  {
+    title: "RH",
+    icon: UserCheck,
+    path: "/rh",
+    badge: "novo",
+    subItems: [
+      { title: "Funcionários", path: "/rh/funcionarios" },
+      { title: "Ponto", path: "/rh/ponto" },
+      { title: "Folha", path: "/rh/folha" },
+      { title: "Relatórios", path: "/rh/relatorios" },
+      { title: "Autoatendimento", path: "/rh/autoatendimento" },
     ],
   },
   {

@@ -2165,6 +2165,36 @@ export type Database = {
           },
         ]
       }
+      departments: {
+        Row: {
+          company_id: string
+          created_at: string
+          description: string | null
+          id: string
+          manager_id: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          manager_id?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          manager_id?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       derived_deals: {
         Row: {
           company_id: string
@@ -2292,6 +2322,102 @@ export type Database = {
           variables?: string[]
         }
         Relationships: []
+      }
+      employee_benefits: {
+        Row: {
+          amount: number
+          benefit_type: Database["public"]["Enums"]["benefit_type"]
+          company_id: string
+          created_at: string
+          description: string | null
+          employee_id: string
+          id: string
+          payroll_id: string | null
+        }
+        Insert: {
+          amount: number
+          benefit_type: Database["public"]["Enums"]["benefit_type"]
+          company_id: string
+          created_at?: string
+          description?: string | null
+          employee_id: string
+          id?: string
+          payroll_id?: string | null
+        }
+        Update: {
+          amount?: number
+          benefit_type?: Database["public"]["Enums"]["benefit_type"]
+          company_id?: string
+          created_at?: string
+          description?: string | null
+          employee_id?: string
+          id?: string
+          payroll_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_benefits_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_benefits_payroll_id_fkey"
+            columns: ["payroll_id"]
+            isOneToOne: false
+            referencedRelation: "payroll"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      employee_deductions: {
+        Row: {
+          amount: number
+          company_id: string
+          created_at: string
+          deduction_type: Database["public"]["Enums"]["deduction_type"]
+          description: string | null
+          employee_id: string
+          id: string
+          payroll_id: string | null
+        }
+        Insert: {
+          amount: number
+          company_id: string
+          created_at?: string
+          deduction_type: Database["public"]["Enums"]["deduction_type"]
+          description?: string | null
+          employee_id: string
+          id?: string
+          payroll_id?: string | null
+        }
+        Update: {
+          amount?: number
+          company_id?: string
+          created_at?: string
+          deduction_type?: Database["public"]["Enums"]["deduction_type"]
+          description?: string | null
+          employee_id?: string
+          id?: string
+          payroll_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_deductions_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_deductions_payroll_id_fkey"
+            columns: ["payroll_id"]
+            isOneToOne: false
+            referencedRelation: "payroll"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       engagement_sequences: {
         Row: {
@@ -2954,6 +3080,53 @@ export type Database = {
             columns: ["opportunity_id"]
             isOneToOne: false
             referencedRelation: "opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_positions: {
+        Row: {
+          company_id: string
+          created_at: string
+          department_id: string | null
+          description: string | null
+          id: string
+          job_type: Database["public"]["Enums"]["job_type"]
+          salary_max: number | null
+          salary_min: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          department_id?: string | null
+          description?: string | null
+          id?: string
+          job_type?: Database["public"]["Enums"]["job_type"]
+          salary_max?: number | null
+          salary_min?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          department_id?: string | null
+          description?: string | null
+          id?: string
+          job_type?: Database["public"]["Enums"]["job_type"]
+          salary_max?: number | null
+          salary_min?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_positions_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
             referencedColumns: ["id"]
           },
         ]
@@ -5032,6 +5205,123 @@ export type Database = {
         }
         Relationships: []
       }
+      payroll: {
+        Row: {
+          base_salary: number
+          bonus_amount: number | null
+          company_id: string
+          created_at: string
+          employee_id: string
+          gross_salary: number
+          id: string
+          net_salary: number
+          overtime_amount: number | null
+          processed_at: string | null
+          processed_by: string | null
+          reference_month: number
+          reference_year: number
+          total_benefits: number | null
+          total_deductions: number | null
+          updated_at: string
+        }
+        Insert: {
+          base_salary: number
+          bonus_amount?: number | null
+          company_id: string
+          created_at?: string
+          employee_id: string
+          gross_salary: number
+          id?: string
+          net_salary: number
+          overtime_amount?: number | null
+          processed_at?: string | null
+          processed_by?: string | null
+          reference_month: number
+          reference_year: number
+          total_benefits?: number | null
+          total_deductions?: number | null
+          updated_at?: string
+        }
+        Update: {
+          base_salary?: number
+          bonus_amount?: number | null
+          company_id?: string
+          created_at?: string
+          employee_id?: string
+          gross_salary?: number
+          id?: string
+          net_salary?: number
+          overtime_amount?: number | null
+          processed_at?: string | null
+          processed_by?: string | null
+          reference_month?: number
+          reference_year?: number
+          total_benefits?: number | null
+          total_deductions?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_processed_by_fkey"
+            columns: ["processed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payslips: {
+        Row: {
+          company_id: string
+          created_at: string
+          employee_id: string
+          generated_at: string | null
+          id: string
+          payroll_id: string
+          pdf_url: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          employee_id: string
+          generated_at?: string | null
+          id?: string
+          payroll_id: string
+          pdf_url?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          employee_id?: string
+          generated_at?: string | null
+          id?: string
+          payroll_id?: string
+          pdf_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payslips_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payslips_payroll_id_fkey"
+            columns: ["payroll_id"]
+            isOneToOne: false
+            referencedRelation: "payroll"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pending_actions: {
         Row: {
           automation_step_id: string
@@ -5602,48 +5892,96 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           avatar_url: string | null
+          birth_date: string | null
           cargo: string | null
           company_id: string | null
+          cpf: string | null
           created_at: string | null
+          department_id: string | null
           email: string
+          employee_id: string | null
+          employee_status: Database["public"]["Enums"]["employee_status"] | null
           full_name: string
+          hire_date: string | null
           id: string
           is_company_admin: boolean | null
+          job_position_id: string | null
           phone: string | null
           role: Database["public"]["Enums"]["user_role"] | null
           role_id: string | null
+          salary: number | null
+          termination_date: string | null
           updated_at: string | null
         }
         Insert: {
+          address?: string | null
           avatar_url?: string | null
+          birth_date?: string | null
           cargo?: string | null
           company_id?: string | null
+          cpf?: string | null
           created_at?: string | null
+          department_id?: string | null
           email: string
+          employee_id?: string | null
+          employee_status?:
+            | Database["public"]["Enums"]["employee_status"]
+            | null
           full_name: string
+          hire_date?: string | null
           id: string
           is_company_admin?: boolean | null
+          job_position_id?: string | null
           phone?: string | null
           role?: Database["public"]["Enums"]["user_role"] | null
           role_id?: string | null
+          salary?: number | null
+          termination_date?: string | null
           updated_at?: string | null
         }
         Update: {
+          address?: string | null
           avatar_url?: string | null
+          birth_date?: string | null
           cargo?: string | null
           company_id?: string | null
+          cpf?: string | null
           created_at?: string | null
+          department_id?: string | null
           email?: string
+          employee_id?: string | null
+          employee_status?:
+            | Database["public"]["Enums"]["employee_status"]
+            | null
           full_name?: string
+          hire_date?: string | null
           id?: string
           is_company_admin?: boolean | null
+          job_position_id?: string | null
           phone?: string | null
           role?: Database["public"]["Enums"]["user_role"] | null
           role_id?: string | null
+          salary?: number | null
+          termination_date?: string | null
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "profiles_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profiles_job_position_id_fkey"
+            columns: ["job_position_id"]
+            isOneToOne: false
+            referencedRelation: "job_positions"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "profiles_role_id_fkey"
             columns: ["role_id"]
@@ -7513,6 +7851,59 @@ export type Database = {
           },
         ]
       }
+      time_tracking: {
+        Row: {
+          break_end: string | null
+          break_start: string | null
+          clock_in: string | null
+          clock_out: string | null
+          company_id: string
+          created_at: string
+          date: string
+          employee_id: string
+          id: string
+          notes: string | null
+          overtime_hours: number | null
+          updated_at: string
+        }
+        Insert: {
+          break_end?: string | null
+          break_start?: string | null
+          clock_in?: string | null
+          clock_out?: string | null
+          company_id: string
+          created_at?: string
+          date: string
+          employee_id: string
+          id?: string
+          notes?: string | null
+          overtime_hours?: number | null
+          updated_at?: string
+        }
+        Update: {
+          break_end?: string | null
+          break_start?: string | null
+          clock_in?: string | null
+          clock_out?: string | null
+          company_id?: string
+          created_at?: string
+          date?: string
+          employee_id?: string
+          id?: string
+          notes?: string | null
+          overtime_hours?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "time_tracking_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       timeline_events: {
         Row: {
           company_id: string
@@ -8177,6 +8568,15 @@ export type Database = {
           commission_rate: number
         }[]
       }
+      calculate_payroll: {
+        Args: {
+          p_company_id: string
+          p_employee_id: string
+          p_month: number
+          p_year: number
+        }
+        Returns: string
+      }
       calculate_sla_deadline: {
         Args: {
           p_company_id: string
@@ -8328,11 +8728,27 @@ export type Database = {
       }
     }
     Enums: {
+      benefit_type:
+        | "vale_refeicao"
+        | "vale_transporte"
+        | "plano_saude"
+        | "plano_odontologico"
+        | "vale_alimentacao"
+        | "outro"
       commission_status: "calculated" | "approved" | "paid"
       communication_channel: "email" | "whatsapp" | "sms" | "call" | "task"
       company_plan: "free" | "starter" | "professional" | "enterprise"
       company_status: "active" | "inactive" | "suspended" | "trial"
+      deduction_type:
+        | "inss"
+        | "irrf"
+        | "fgts"
+        | "vale_refeicao"
+        | "vale_transporte"
+        | "plano_saude"
+        | "outro"
       department_role: "supervisor" | "agent" | "observer"
+      employee_status: "ativo" | "inativo" | "demitido" | "afastado" | "ferias"
       gamification_event_type:
         | "proposta_enviada"
         | "venda_ganha"
@@ -8351,6 +8767,7 @@ export type Database = {
         | "callback_requested"
         | "proposal_requested"
       interaction_type: "mensagem" | "email" | "whatsapp" | "chamada" | "visita"
+      job_type: "clt" | "pj" | "freelancer" | "estagiario" | "terceirizado"
       lead_status:
         | "novo"
         | "qualificado"
@@ -8523,11 +8940,29 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      benefit_type: [
+        "vale_refeicao",
+        "vale_transporte",
+        "plano_saude",
+        "plano_odontologico",
+        "vale_alimentacao",
+        "outro",
+      ],
       commission_status: ["calculated", "approved", "paid"],
       communication_channel: ["email", "whatsapp", "sms", "call", "task"],
       company_plan: ["free", "starter", "professional", "enterprise"],
       company_status: ["active", "inactive", "suspended", "trial"],
+      deduction_type: [
+        "inss",
+        "irrf",
+        "fgts",
+        "vale_refeicao",
+        "vale_transporte",
+        "plano_saude",
+        "outro",
+      ],
       department_role: ["supervisor", "agent", "observer"],
+      employee_status: ["ativo", "inativo", "demitido", "afastado", "ferias"],
       gamification_event_type: [
         "proposta_enviada",
         "venda_ganha",
@@ -8548,6 +8983,7 @@ export const Constants = {
         "proposal_requested",
       ],
       interaction_type: ["mensagem", "email", "whatsapp", "chamada", "visita"],
+      job_type: ["clt", "pj", "freelancer", "estagiario", "terceirizado"],
       lead_status: [
         "novo",
         "qualificado",
