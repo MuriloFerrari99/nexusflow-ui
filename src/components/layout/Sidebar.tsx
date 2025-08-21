@@ -76,6 +76,18 @@ const menuItems = [
     ],
   },
   {
+    title: "Projetos",
+    icon: Users,
+    path: "/projetos",
+    badge: "novo",
+    subItems: [
+      { title: "Dashboard", path: "/projetos" },
+      { title: "Lista", path: "/projetos" },
+      { title: "Kanban", path: "/projetos" },
+      { title: "Gantt", path: "/projetos" },
+    ],
+  },
+  {
     title: "Relatórios",
     icon: BarChart3,
     path: "/relatorios",
