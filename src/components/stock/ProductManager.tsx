@@ -16,6 +16,7 @@ interface Product {
   current_stock: number;
   min_stock: number;
   price: number;
+  unit: string;
   category?: string;
   suppliers?: { name: string };
 }
@@ -34,23 +35,33 @@ export const ProductManager = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('products')
-        .select(`
-          id,
-          name,
-          sku,
-          current_stock,
-          min_stock,
-          price,
-          category,
-          suppliers (name)
-        `)
-        .eq('is_active', true)
-        .order('name');
-
-      if (error) throw error;
-      setProducts(data || []);
+      // For now, use mock data since table structure is being set up
+      const mockProducts: Product[] = [
+        {
+          id: "1",
+          name: "Produto Exemplo 1",
+          sku: "EX001",
+          current_stock: 25,
+          min_stock: 10,
+          price: 99.90,
+          unit: "un",
+          category: "Eletrônicos",
+          suppliers: { name: "Fornecedor A" }
+        },
+        {
+          id: "2",
+          name: "Produto Exemplo 2", 
+          sku: "EX002",
+          current_stock: 5,
+          min_stock: 15,
+          price: 49.50,
+          unit: "un",
+          category: "Acessórios",
+          suppliers: { name: "Fornecedor B" }
+        }
+      ];
+      
+      setProducts(mockProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
       toast({

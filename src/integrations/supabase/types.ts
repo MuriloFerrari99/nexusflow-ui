@@ -5519,16 +5519,21 @@ export type Database = {
       }
       products: {
         Row: {
+          barcode: string | null
           base_price: number
           category: string
           company_id: string
+          cost_price: number | null
           created_at: string | null
           created_by: string | null
           currency: string | null
+          current_stock: number | null
           description: string | null
           id: string
           is_active: boolean | null
           is_configurable: boolean | null
+          max_stock: number | null
+          min_stock: number | null
           name: string
           sku: string | null
           tax_rate: number | null
@@ -5538,16 +5543,21 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          barcode?: string | null
           base_price: number
           category: string
           company_id: string
+          cost_price?: number | null
           created_at?: string | null
           created_by?: string | null
           currency?: string | null
+          current_stock?: number | null
           description?: string | null
           id?: string
           is_active?: boolean | null
           is_configurable?: boolean | null
+          max_stock?: number | null
+          min_stock?: number | null
           name: string
           sku?: string | null
           tax_rate?: number | null
@@ -5557,16 +5567,21 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          barcode?: string | null
           base_price?: number
           category?: string
           company_id?: string
+          cost_price?: number | null
           created_at?: string | null
           created_by?: string | null
           currency?: string | null
+          current_stock?: number | null
           description?: string | null
           id?: string
           is_active?: boolean | null
           is_configurable?: boolean | null
+          max_stock?: number | null
+          min_stock?: number | null
           name?: string
           sku?: string | null
           tax_rate?: number | null

@@ -38,60 +38,33 @@ export const StockDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      // Fetch products statistics
-      const { data: products } = await supabase
-        .from('products')
-        .select('current_stock, min_stock, price')
-        .eq('is_active', true);
+      // For now, use mock data since table structure is being set up
+      setStats({
+        totalProducts: 15,
+        lowStockItems: 3,
+        outOfStockItems: 1,
+        totalValue: 12500.50,
+        recentMovements: 8
+      });
 
-      // Fetch stock alerts
-      const { data: alertsData } = await supabase
-        .from('stock_alerts')
-        .select(`
-          id,
-          alert_type,
-          products!inner (
-            name,
-            current_stock,
-            min_stock
-          )
-        `)
-        .eq('is_active', true);
-
-      // Fetch recent movements (last 7 days)
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      const mockAlerts: StockAlert[] = [
+        {
+          id: "1",
+          product_name: "Produto Exemplo 1",
+          current_stock: 5,
+          min_stock: 10,
+          alert_type: "low_stock"
+        },
+        {
+          id: "2", 
+          product_name: "Produto Exemplo 2",
+          current_stock: 0,
+          min_stock: 5,
+          alert_type: "out_of_stock"
+        }
+      ];
       
-      const { data: movements } = await supabase
-        .from('stock_movements')
-        .select('id')
-        .gte('created_at', sevenDaysAgo.toISOString());
-
-      if (products) {
-        const totalProducts = products.length;
-        const lowStockItems = products.filter(p => p.current_stock <= p.min_stock && p.current_stock > 0).length;
-        const outOfStockItems = products.filter(p => p.current_stock <= 0).length;
-        const totalValue = products.reduce((sum, p) => sum + (p.current_stock * p.price), 0);
-
-        setStats({
-          totalProducts,
-          lowStockItems,
-          outOfStockItems,
-          totalValue,
-          recentMovements: movements?.length || 0
-        });
-      }
-
-      if (alertsData) {
-        const formattedAlerts = alertsData.map(alert => ({
-          id: alert.id,
-          product_name: alert.products.name,
-          current_stock: alert.products.current_stock,
-          min_stock: alert.products.min_stock,
-          alert_type: alert.alert_type
-        }));
-        setAlerts(formattedAlerts);
-      }
+      setAlerts(mockAlerts);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     } finally {
