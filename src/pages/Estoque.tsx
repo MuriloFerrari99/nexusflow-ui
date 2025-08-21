@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Header } from "@/components/layout/Header";
+import { Layout } from "@/components/layout/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StockDashboard } from "@/components/stock/StockDashboard";
 import { ProductManager } from "@/components/stock/ProductManager";
@@ -10,18 +9,16 @@ import { BarcodeSimulator } from "@/components/stock/BarcodeSimulator";
 
 const Estoque = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main className="container mx-auto p-6">
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
-              Gestão de Estoque
-            </h1>
-            <p className="text-muted-foreground">
-              Controle completo do seu estoque e cadeia de suprimentos
-            </p>
-          </div>
+    <Layout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Gestão de Estoque
+          </h1>
+          <p className="text-muted-foreground">
+            Controle completo do seu estoque e cadeia de suprimentos
+          </p>
+        </div>
 
           <Tabs defaultValue="dashboard" className="space-y-4">
             <TabsList className="grid w-full grid-cols-6">
@@ -58,8 +55,7 @@ const Estoque = () => {
             </TabsContent>
           </Tabs>
         </div>
-      </main>
-    </div>
+    </Layout>
   );
 };
 
