@@ -8,6 +8,7 @@ import { FinancialDashboard } from "@/components/financial/FinancialDashboard";
 import { ContasReceber } from "@/components/financial/ContasReceber";
 import { ContasPagar } from "@/components/financial/ContasPagar";
 import { FluxoCaixa } from "@/components/financial/FluxoCaixa";
+import { DRE } from "@/components/financial/DRE";
 import { InvoiceForm } from "@/components/financial/InvoiceForm";
 import { TransactionForm } from "@/components/financial/TransactionForm";
 
@@ -49,7 +50,7 @@ export default function Financas() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Dashboard
@@ -65,6 +66,10 @@ export default function Financas() {
             <TabsTrigger value="fluxo-caixa" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Fluxo de Caixa
+            </TabsTrigger>
+            <TabsTrigger value="dre" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              DRE
             </TabsTrigger>
           </TabsList>
 
@@ -82,6 +87,10 @@ export default function Financas() {
 
           <TabsContent value="fluxo-caixa" className="space-y-4">
             <FluxoCaixa />
+          </TabsContent>
+
+          <TabsContent value="dre" className="space-y-4">
+            <DRE />
           </TabsContent>
         </Tabs>
 
