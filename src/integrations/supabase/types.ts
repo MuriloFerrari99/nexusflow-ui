@@ -149,6 +149,81 @@ export type Database = {
         }
         Relationships: []
       }
+      accounts_receivable: {
+        Row: {
+          amount: number
+          company_id: string
+          created_at: string
+          created_by: string
+          customer_document: string
+          customer_email: string | null
+          customer_name: string
+          customer_phone: string | null
+          description: string | null
+          discount_amount: number | null
+          due_date: string
+          external_id: string | null
+          id: string
+          interest_rate: number | null
+          invoice_number: string | null
+          issue_date: string
+          late_fee: number | null
+          paid_amount: number | null
+          paid_at: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"] | null
+          status: Database["public"]["Enums"]["payment_status"]
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          company_id: string
+          created_at?: string
+          created_by: string
+          customer_document: string
+          customer_email?: string | null
+          customer_name: string
+          customer_phone?: string | null
+          description?: string | null
+          discount_amount?: number | null
+          due_date: string
+          external_id?: string | null
+          id?: string
+          interest_rate?: number | null
+          invoice_number?: string | null
+          issue_date?: string
+          late_fee?: number | null
+          paid_amount?: number | null
+          paid_at?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          customer_document?: string
+          customer_email?: string | null
+          customer_name?: string
+          customer_phone?: string | null
+          description?: string | null
+          discount_amount?: number | null
+          due_date?: string
+          external_id?: string | null
+          id?: string
+          interest_rate?: number | null
+          invoice_number?: string | null
+          issue_date?: string
+          late_fee?: number | null
+          paid_amount?: number | null
+          paid_at?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       activity_logs: {
         Row: {
           action: string
@@ -1163,6 +1238,47 @@ export type Database = {
           },
         ]
       }
+      collection_timeline: {
+        Row: {
+          account_receivable_id: string
+          automated: boolean
+          company_id: string
+          created_at: string
+          event_data: Json
+          event_type: string
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          account_receivable_id: string
+          automated?: boolean
+          company_id: string
+          created_at?: string
+          event_data?: Json
+          event_type: string
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          account_receivable_id?: string
+          automated?: boolean
+          company_id?: string
+          created_at?: string
+          event_data?: Json
+          event_type?: string
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_timeline_account_receivable_id_fkey"
+            columns: ["account_receivable_id"]
+            isOneToOne: false
+            referencedRelation: "accounts_receivable"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           company_id: string
@@ -2164,6 +2280,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      default_risk_scores: {
+        Row: {
+          company_id: string
+          created_at: string
+          customer_document: string
+          factors: Json
+          id: string
+          last_calculated_at: string
+          risk_level: Database["public"]["Enums"]["default_risk_level"]
+          risk_score: number
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          customer_document: string
+          factors?: Json
+          id?: string
+          last_calculated_at?: string
+          risk_level: Database["public"]["Enums"]["default_risk_level"]
+          risk_score: number
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          customer_document?: string
+          factors?: Json
+          id?: string
+          last_calculated_at?: string
+          risk_level?: Database["public"]["Enums"]["default_risk_level"]
+          risk_score?: number
+        }
+        Relationships: []
       }
       departments: {
         Row: {
@@ -5204,6 +5353,163 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      payment_collections: {
+        Row: {
+          account_receivable_id: string
+          amount: number
+          boleto_code: string | null
+          collection_type: string
+          company_id: string
+          created_at: string
+          created_by: string
+          expires_at: string | null
+          id: string
+          metadata: Json | null
+          payment_link: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          pix_qr_code: string | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["collection_status"]
+          updated_at: string
+        }
+        Insert: {
+          account_receivable_id: string
+          amount: number
+          boleto_code?: string | null
+          collection_type?: string
+          company_id: string
+          created_at?: string
+          created_by: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_link?: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          pix_qr_code?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["collection_status"]
+          updated_at?: string
+        }
+        Update: {
+          account_receivable_id?: string
+          amount?: number
+          boleto_code?: string | null
+          collection_type?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_link?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          pix_qr_code?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["collection_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_collections_account_receivable_id_fkey"
+            columns: ["account_receivable_id"]
+            isOneToOne: false
+            referencedRelation: "accounts_receivable"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_integrations: {
+        Row: {
+          api_key_encrypted: string | null
+          company_id: string
+          config: Json
+          created_at: string
+          created_by: string
+          id: string
+          is_active: boolean
+          is_sandbox: boolean
+          provider: string
+          updated_at: string
+        }
+        Insert: {
+          api_key_encrypted?: string | null
+          company_id: string
+          config?: Json
+          created_at?: string
+          created_by: string
+          id?: string
+          is_active?: boolean
+          is_sandbox?: boolean
+          provider: string
+          updated_at?: string
+        }
+        Update: {
+          api_key_encrypted?: string | null
+          company_id?: string
+          config?: Json
+          created_at?: string
+          created_by?: string
+          id?: string
+          is_active?: boolean
+          is_sandbox?: boolean
+          provider?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payment_reminders: {
+        Row: {
+          account_receivable_id: string
+          attempt_number: number
+          company_id: string
+          created_at: string
+          id: string
+          message: string
+          reminder_type: Database["public"]["Enums"]["reminder_type"]
+          response_data: Json | null
+          scheduled_at: string
+          sent_at: string | null
+          status: string
+          subject: string | null
+        }
+        Insert: {
+          account_receivable_id: string
+          attempt_number?: number
+          company_id: string
+          created_at?: string
+          id?: string
+          message: string
+          reminder_type: Database["public"]["Enums"]["reminder_type"]
+          response_data?: Json | null
+          scheduled_at: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+        }
+        Update: {
+          account_receivable_id?: string
+          attempt_number?: number
+          company_id?: string
+          created_at?: string
+          id?: string
+          message?: string
+          reminder_type?: Database["public"]["Enums"]["reminder_type"]
+          response_data?: Json | null
+          scheduled_at?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_reminders_account_receivable_id_fkey"
+            columns: ["account_receivable_id"]
+            isOneToOne: false
+            referencedRelation: "accounts_receivable"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payroll: {
         Row: {
@@ -8771,6 +9077,10 @@ export type Database = {
           commission_rate: number
         }[]
       }
+      calculate_overdue_days: {
+        Args: { due_date: string }
+        Returns: number
+      }
       calculate_payroll: {
         Args: {
           p_company_id: string
@@ -8919,6 +9229,16 @@ export type Database = {
           metric_name: string
         }[]
       }
+      track_collection_event: {
+        Args: {
+          p_account_receivable_id: string
+          p_automated?: boolean
+          p_event_data?: Json
+          p_event_type: string
+          p_user_id?: string
+        }
+        Returns: string
+      }
       validate_rls_optimizations: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -8938,6 +9258,7 @@ export type Database = {
         | "plano_odontologico"
         | "vale_alimentacao"
         | "outro"
+      collection_status: "active" | "suspended" | "completed" | "cancelled"
       commission_status: "calculated" | "approved" | "paid"
       communication_channel: "email" | "whatsapp" | "sms" | "call" | "task"
       company_plan: "free" | "starter" | "professional" | "enterprise"
@@ -8950,6 +9271,7 @@ export type Database = {
         | "vale_transporte"
         | "plano_saude"
         | "outro"
+      default_risk_level: "low" | "medium" | "high" | "critical"
       department_role: "supervisor" | "agent" | "observer"
       employee_status: "ativo" | "inativo" | "demitido" | "afastado" | "ferias"
       gamification_event_type:
@@ -8984,6 +9306,13 @@ export type Database = {
         | "negociacao"
         | "fechado_ganho"
         | "fechado_perdido"
+      payment_method:
+        | "pix"
+        | "boleto"
+        | "credit_card"
+        | "debit_card"
+        | "bank_transfer"
+      payment_status: "pending" | "paid" | "overdue" | "cancelled" | "partial"
       project_priority: "low" | "medium" | "high" | "urgent"
       project_status:
         | "planning"
@@ -8991,6 +9320,7 @@ export type Database = {
         | "on_hold"
         | "completed"
         | "cancelled"
+      reminder_type: "email" | "sms" | "whatsapp" | "phone_call"
       sequence_enrollment_status:
         | "active"
         | "paused"
@@ -9158,6 +9488,7 @@ export const Constants = {
         "vale_alimentacao",
         "outro",
       ],
+      collection_status: ["active", "suspended", "completed", "cancelled"],
       commission_status: ["calculated", "approved", "paid"],
       communication_channel: ["email", "whatsapp", "sms", "call", "task"],
       company_plan: ["free", "starter", "professional", "enterprise"],
@@ -9171,6 +9502,7 @@ export const Constants = {
         "plano_saude",
         "outro",
       ],
+      default_risk_level: ["low", "medium", "high", "critical"],
       department_role: ["supervisor", "agent", "observer"],
       employee_status: ["ativo", "inativo", "demitido", "afastado", "ferias"],
       gamification_event_type: [
@@ -9209,6 +9541,14 @@ export const Constants = {
         "fechado_ganho",
         "fechado_perdido",
       ],
+      payment_method: [
+        "pix",
+        "boleto",
+        "credit_card",
+        "debit_card",
+        "bank_transfer",
+      ],
+      payment_status: ["pending", "paid", "overdue", "cancelled", "partial"],
       project_priority: ["low", "medium", "high", "urgent"],
       project_status: [
         "planning",
@@ -9217,6 +9557,7 @@ export const Constants = {
         "completed",
         "cancelled",
       ],
+      reminder_type: ["email", "sms", "whatsapp", "phone_call"],
       sequence_enrollment_status: [
         "active",
         "paused",
