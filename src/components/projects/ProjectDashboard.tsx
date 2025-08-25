@@ -9,11 +9,36 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { CalendarIcon, ClockIcon, TrendingUpIcon, UsersIcon, FilterIcon, SearchIcon } from "lucide-react";
 
+interface Profile {
+  id: string;
+  full_name?: string;
+  email: string;
+}
+
+interface ProjectMember {
+  id: string;
+  user_id: string;
+  profile?: Profile;
+}
+
+interface ProjectWithData {
+  id: string;
+  name: string;
+  description?: string;
+  status: string;
+  priority?: string;
+  progress?: number;
+  end_date?: string;
+  project_tasks?: Array<{ id: string; status: string; priority?: string }>;
+  project_members?: ProjectMember[];
+}
+
 export const ProjectDashboard = () => {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
-  const { data: projects, isLoading } = useQuery({
+  
+  const { data: projects, isLoading } = useQuery<ProjectWithData[]>({
     queryKey: ['projects-dashboard', statusFilter, searchTerm, priorityFilter],
     queryFn: async () => {
       let query = supabase
@@ -21,12 +46,12 @@ export const ProjectDashboard = () => {
         .select(`
           *,
           project_tasks (id, status, priority),
-          project_members (id, user_id, profiles (full_name, email))
+          project_members (id, user_id)
         `);
       
-      // Apply filters
+      // Apply filters - using any for filter values to avoid type issues
       if (statusFilter !== "all") {
-        query = query.eq('status', statusFilter);
+        query = query.eq('status', statusFilter as any);
       }
       
       if (searchTerm) {
@@ -34,13 +59,35 @@ export const ProjectDashboard = () => {
       }
       
       if (priorityFilter !== "all") {
-        query = query.eq('priority', priorityFilter);
+        query = query.eq('priority', priorityFilter as any);
       }
       
       const { data, error } = await query.order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data;
+      
+      // Fetch profiles for project members separately
+      if (data && data.length > 0) {
+        const allMemberUserIds = data.flatMap(p => p.project_members?.map(m => m.user_id) || []);
+        if (allMemberUserIds.length > 0) {
+          const { data: profiles } = await supabase
+            .from('profiles')
+            .select('id, full_name, email')
+            .in('id', allMemberUserIds);
+          
+          // Attach profiles to members
+          data.forEach(project => {
+            if (project.project_members) {
+              project.project_members = project.project_members.map(member => ({
+                ...member,
+                profile: profiles?.find(p => p.id === member.user_id)
+              }));
+            }
+          });
+        }
+      }
+      
+      return data as ProjectWithData[];
     }
   });
 
@@ -302,9 +349,9 @@ export const ProjectDashboard = () => {
                       <div 
                         key={member.id} 
                         className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center border-2 border-background"
-                        title={member.profiles?.full_name || member.profiles?.email}
+                        title={member.profile?.full_name || member.profile?.email || "Usuário"}
                       >
-                        {(member.profiles?.full_name || member.profiles?.email)?.[0]?.toUpperCase()}
+                        {(member.profile?.full_name || member.profile?.email || "U")?.[0]?.toUpperCase()}
                       </div>
                     ))}
                     {project.project_members.length > 3 && (

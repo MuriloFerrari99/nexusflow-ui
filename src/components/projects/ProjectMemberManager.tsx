@@ -13,6 +13,25 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { UserPlus, Trash2, Settings } from "lucide-react";
 import { toast } from "sonner";
 
+interface Profile {
+  id: string;
+  full_name?: string;
+  email: string;
+  avatar_url?: string;
+}
+
+interface ProjectMember {
+  id: string;
+  project_id: string;
+  user_id: string;
+  role: string;
+  can_edit?: boolean;
+  can_assign_tasks?: boolean;
+  added_by: string;
+  added_at: string;
+  profile?: Profile;
+}
+
 interface ProjectMemberManagerProps {
   projectId: string;
 }
@@ -26,24 +45,35 @@ export const ProjectMemberManager = ({ projectId }: ProjectMemberManagerProps) =
   
   const queryClient = useQueryClient();
 
-  // Fetch project members
-  const { data: members, isLoading } = useQuery({
+  // Fetch project members with profiles in separate calls for better type safety
+  const { data: members, isLoading } = useQuery<ProjectMember[]>({
     queryKey: ['project-members', projectId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: memberData, error } = await supabase
         .from('project_members')
-        .select(`
-          *,
-          profiles (
-            id,
-            full_name,
-            email
-          )
-        `)
+        .select('*')
         .eq('project_id', projectId);
       
       if (error) throw error;
-      return data;
+      
+      // Fetch profiles separately
+      if (memberData && memberData.length > 0) {
+        const userIds = memberData.map(m => m.user_id);
+        const { data: profiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('id, full_name, email, avatar_url')
+          .in('id', userIds);
+        
+        if (profileError) throw profileError;
+        
+        // Combine data
+        return memberData.map(member => ({
+          ...member,
+          profile: profiles?.find(p => p.id === member.user_id)
+        })) as ProjectMember[];
+      }
+      
+      return (memberData || []) as ProjectMember[];
     }
   });
 
@@ -53,11 +83,13 @@ export const ProjectMemberManager = ({ projectId }: ProjectMemberManagerProps) =
     queryFn: async () => {
       if (!searchEmail || searchEmail.length < 3) return [];
       
+      const memberUserIds = members?.map(m => m.user_id) || [];
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('id, full_name, email, avatar_url')
         .ilike('email', `%${searchEmail}%`)
-        .not('id', 'in', `(${members?.map(m => m.user_id).join(',') || 'null'})`)
+        .not('id', 'in', `(${memberUserIds.length > 0 ? memberUserIds.join(',') : 'null'})`)
         .limit(5);
       
       if (error) throw error;
@@ -195,7 +227,7 @@ export const ProjectMemberManager = ({ projectId }: ProjectMemberManagerProps) =
                       <div key={user.id} className="flex items-center justify-between p-2 border rounded">
                         <div className="flex items-center gap-2">
                           <Avatar className="h-8 w-8">
-                            <AvatarImage src={user.avatar_url} />
+                            <AvatarImage src={user.avatar_url || ""} />
                             <AvatarFallback>{user.full_name?.[0] || user.email[0]}</AvatarFallback>
                           </Avatar>
                           <div>
@@ -265,15 +297,15 @@ export const ProjectMemberManager = ({ projectId }: ProjectMemberManagerProps) =
             <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg">
               <div className="flex items-center gap-3">
                 <Avatar>
-                  <AvatarImage src={member.profiles?.avatar_url} />
+                  <AvatarImage src={member.profile?.avatar_url || ""} />
                   <AvatarFallback>
-                    {member.profiles?.full_name?.[0] || member.profiles?.email[0]}
+                    {member.profile?.full_name?.[0] || member.profile?.email?.[0] || "U"}
                   </AvatarFallback>
                 </Avatar>
                 
                 <div>
-                  <p className="font-medium">{member.profiles?.full_name || member.profiles?.email}</p>
-                  <p className="text-sm text-muted-foreground">{member.profiles?.email}</p>
+                  <p className="font-medium">{member.profile?.full_name || member.profile?.email || "Usuário"}</p>
+                  <p className="text-sm text-muted-foreground">{member.profile?.email || ""}</p>
                   
                   <div className="flex gap-1 mt-1">
                     <Badge variant="secondary" className={getRoleColor(member.role)}>
@@ -301,7 +333,7 @@ export const ProjectMemberManager = ({ projectId }: ProjectMemberManagerProps) =
                       <DialogHeader>
                         <DialogTitle>Editar Permissões</DialogTitle>
                         <DialogDescription>
-                          Altere as permissões de {member.profiles?.full_name}
+                          Altere as permissões de {member.profile?.full_name || "usuário"}
                         </DialogDescription>
                       </DialogHeader>
                       

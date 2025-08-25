@@ -11,6 +11,26 @@ import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
+interface Profile {
+  id: string;
+  full_name?: string;
+  email: string;
+  avatar_url?: string;
+}
+
+interface Comment {
+  id: string;
+  entity_id: string;
+  entity_type: string;
+  content: string;
+  user_id: string;
+  company_id?: string;
+  created_at: string;
+  updated_at: string;
+  mentions?: any[];
+  profile?: Profile;
+}
+
 interface ProjectCommentsProps {
   projectId: string;
   entityType?: string;
@@ -22,34 +42,47 @@ export const ProjectComments = ({ projectId, entityType = "project" }: ProjectCo
   
   const queryClient = useQueryClient();
 
-  // Fetch comments
+  // Fetch comments with profiles in separate calls for better type safety
   const { data: comments, isLoading } = useQuery({
     queryKey: ['project-comments', projectId, entityType],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: commentData, error } = await supabase
         .from('comments')
-        .select(`
-          *,
-          profiles (
-            id,
-            full_name,
-            email
-          ),
-          mentions (
-            id,
-            mentioned_user_id,
-            profiles!mentions_mentioned_user_id_fkey (
-              full_name,
-              email
-            )
-          )
-        `)
+        .select('*')
         .eq('entity_id', projectId)
         .eq('entity_type', entityType)
         .order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data;
+      
+      if (commentData && commentData.length > 0) {
+        // Fetch user profiles for comments
+        const userIds = commentData.map(c => c.user_id);
+        const { data: profiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('id, full_name, email, avatar_url')
+          .in('id', userIds);
+        
+        if (profileError) throw profileError;
+        
+        // Fetch mentions for comments
+        const commentIds = commentData.map(c => c.id);
+        const { data: mentionData, error: mentionError } = await supabase
+          .from('mentions')
+          .select('id, comment_id, mentioned_user_id')
+          .in('comment_id', commentIds);
+        
+        if (mentionError) throw mentionError;
+        
+        // Combine data
+        return commentData.map(comment => ({
+          ...comment,
+          profile: profiles?.find(p => p.id === comment.user_id),
+          mentions: mentionData?.filter(m => m.comment_id === comment.id) || []
+        }));
+      }
+      
+      return commentData || [];
     }
   });
 
@@ -57,19 +90,25 @@ export const ProjectComments = ({ projectId, entityType = "project" }: ProjectCo
   const { data: teamMembers } = useQuery({
     queryKey: ['project-team-members', projectId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data: memberData, error } = await supabase
         .from('project_members')
-        .select(`
-          profiles (
-            id,
-            full_name,
-            email
-          )
-        `)
+        .select('user_id')
         .eq('project_id', projectId);
       
       if (error) throw error;
-      return data.map(m => m.profiles).filter(Boolean);
+      
+      if (memberData && memberData.length > 0) {
+        const userIds = memberData.map(m => m.user_id);
+        const { data: profiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('id, full_name, email')
+          .in('id', userIds);
+        
+        if (profileError) throw profileError;
+        return profiles || [];
+      }
+      
+      return [];
     }
   });
 
@@ -79,6 +118,13 @@ export const ProjectComments = ({ projectId, entityType = "project" }: ProjectCo
       const user = (await supabase.auth.getUser()).data.user;
       if (!user) throw new Error("User not authenticated");
 
+      // Get user's company_id
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('company_id')
+        .eq('id', user.id)
+        .single();
+
       // Create comment
       const { data: comment, error: commentError } = await supabase
         .from('comments')
@@ -87,7 +133,7 @@ export const ProjectComments = ({ projectId, entityType = "project" }: ProjectCo
           entity_type: entityType,
           content: newComment,
           user_id: user.id,
-          company_id: (await supabase.from('profiles').select('company_id').eq('id', user.id).single()).data?.company_id,
+          company_id: userProfile?.company_id,
           mentions: mentionedUsers
         })
         .select()
@@ -100,7 +146,7 @@ export const ProjectComments = ({ projectId, entityType = "project" }: ProjectCo
         const mentionData = mentionedUsers.map(userId => ({
           comment_id: comment.id,
           mentioned_user_id: userId,
-          company_id: comment.company_id
+          company_id: userProfile?.company_id
         }));
 
         const { error: mentionError } = await supabase
@@ -130,20 +176,6 @@ export const ProjectComments = ({ projectId, entityType = "project" }: ProjectCo
     
     setNewComment(newText);
     setMentionedUsers(prev => [...new Set([...prev, userId])]);
-  };
-
-  const renderCommentContent = (content: string, mentions: any[]) => {
-    let processedContent = content;
-    
-    mentions?.forEach(mention => {
-      const mentionText = `@${mention.profiles?.full_name || mention.profiles?.email}`;
-      processedContent = processedContent.replace(
-        new RegExp(`@${mention.profiles?.full_name || mention.profiles?.email}`, 'g'),
-        `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mx-1">${mentionText}</span>`
-      );
-    });
-
-    return <div dangerouslySetInnerHTML={{ __html: processedContent }} />;
   };
 
   if (isLoading) {
@@ -205,16 +237,16 @@ export const ProjectComments = ({ projectId, entityType = "project" }: ProjectCo
           {comments?.map((comment) => (
             <div key={comment.id} className="flex gap-3 p-3 border rounded-lg">
               <Avatar className="h-8 w-8 flex-shrink-0">
-                <AvatarImage src={comment.profiles?.avatar_url} />
+                <AvatarImage src={comment.profile?.avatar_url || ""} />
                 <AvatarFallback>
-                  {comment.profiles?.full_name?.[0] || comment.profiles?.email[0]}
+                  {comment.profile?.full_name?.[0] || comment.profile?.email?.[0] || "U"}
                 </AvatarFallback>
               </Avatar>
               
               <div className="flex-1 space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="font-medium text-sm">
-                    {comment.profiles?.full_name || comment.profiles?.email}
+                    {comment.profile?.full_name || comment.profile?.email || "Usuário"}
                   </span>
                   <span className="text-xs text-muted-foreground">
                     {formatDistanceToNow(new Date(comment.created_at), { 
@@ -230,7 +262,7 @@ export const ProjectComments = ({ projectId, entityType = "project" }: ProjectCo
                 </div>
                 
                 <div className="text-sm">
-                  {renderCommentContent(comment.content, comment.mentions)}
+                  {comment.content}
                 </div>
               </div>
             </div>

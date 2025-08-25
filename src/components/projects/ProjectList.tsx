@@ -4,11 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Users, Calendar } from "lucide-react";
+import { Plus, Edit, Trash2, Users, Calendar, Eye } from "lucide-react";
 import { ProjectForm } from "./ProjectForm";
 import { ProjectMemberManager } from "./ProjectMemberManager";
 import { ProjectComments } from "./ProjectComments";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
 
@@ -133,6 +133,14 @@ export const ProjectList = () => {
                   <p className="text-sm text-muted-foreground">{project.description}</p>
                 </div>
                 <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSelectedProjectForDetails(project)}
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    Detalhes
+                  </Button>
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button 
@@ -227,6 +235,66 @@ export const ProjectList = () => {
           </CardContent>
         </Card>
       )}
+
+      {/* Project Details Dialog */}
+      <Dialog open={!!selectedProjectForDetails} onOpenChange={(open) => !open && setSelectedProjectForDetails(null)}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{selectedProjectForDetails?.name}</DialogTitle>
+            <DialogDescription>
+              {selectedProjectForDetails?.description}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedProjectForDetails && (
+            <div className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <ProjectMemberManager projectId={selectedProjectForDetails.id} />
+                
+                <div className="space-y-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Informações do Projeto</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Status:</span>
+                        <Badge variant="secondary" className={getStatusColor(selectedProjectForDetails.status)}>
+                          {getStatusLabel(selectedProjectForDetails.status)}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Prioridade:</span>
+                        <Badge variant={selectedProjectForDetails.priority === 'high' ? 'destructive' : 'secondary'}>
+                          {getPriorityLabel(selectedProjectForDetails.priority)}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Progresso:</span>
+                        <span>{Math.round(selectedProjectForDetails.progress || 0)}%</span>
+                      </div>
+                      {selectedProjectForDetails.start_date && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Início:</span>
+                          <span>{new Date(selectedProjectForDetails.start_date).toLocaleDateString('pt-BR')}</span>
+                        </div>
+                      )}
+                      {selectedProjectForDetails.end_date && (
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Prazo:</span>
+                          <span>{new Date(selectedProjectForDetails.end_date).toLocaleDateString('pt-BR')}</span>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+              
+              <ProjectComments projectId={selectedProjectForDetails.id} entityType="project" />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
