@@ -52,7 +52,7 @@ export function TransactionList({ refresh }: TransactionListProps) {
         `)
         .order('transaction_date', { ascending: false });
 
-      if (typeFilter) {
+      if (typeFilter && typeFilter !== "all") {
         query = query.eq('transaction_type', typeFilter);
       }
 
@@ -135,7 +135,7 @@ export function TransactionList({ refresh }: TransactionListProps) {
               <SelectValue placeholder="Tipo" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="income">Entrada</SelectItem>
               <SelectItem value="expense">Saída</SelectItem>
             </SelectContent>

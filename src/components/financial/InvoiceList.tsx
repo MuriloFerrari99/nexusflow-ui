@@ -44,7 +44,7 @@ export function InvoiceList({ refresh }: InvoiceListProps) {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (statusFilter) {
+      if (statusFilter && statusFilter !== "all") {
         query = query.eq('status', statusFilter);
       }
 
@@ -123,7 +123,7 @@ export function InvoiceList({ refresh }: InvoiceListProps) {
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="draft">Rascunho</SelectItem>
               <SelectItem value="pending">Pendente</SelectItem>
               <SelectItem value="paid">Paga</SelectItem>

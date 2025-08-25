@@ -53,11 +53,11 @@ export function PaymentList({ refresh }: PaymentListProps) {
         `)
         .order('payment_date', { ascending: false });
 
-      if (typeFilter) {
+      if (typeFilter && typeFilter !== "all") {
         query = query.eq('payment_type', typeFilter);
       }
 
-      if (methodFilter) {
+      if (methodFilter && methodFilter !== "all") {
         query = query.eq('payment_method', methodFilter);
       }
 
@@ -150,7 +150,7 @@ export function PaymentList({ refresh }: PaymentListProps) {
               <SelectValue placeholder="Tipo" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="received">Recebido</SelectItem>
               <SelectItem value="sent">Enviado</SelectItem>
             </SelectContent>
@@ -161,7 +161,7 @@ export function PaymentList({ refresh }: PaymentListProps) {
               <SelectValue placeholder="Método" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos</SelectItem>
+              <SelectItem value="all">Todos</SelectItem>
               <SelectItem value="cash">Dinheiro</SelectItem>
               <SelectItem value="pix">PIX</SelectItem>
               <SelectItem value="bank_transfer">Transferência</SelectItem>
