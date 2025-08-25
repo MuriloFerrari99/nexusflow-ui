@@ -1015,6 +1015,106 @@ export type Database = {
           },
         ]
       }
+      bank_reconciliations: {
+        Row: {
+          account_id: string
+          company_id: string
+          created_at: string
+          difference_amount: number | null
+          id: string
+          period_end: string
+          period_start: string
+          reconciled_by: string | null
+          reconciliation_date: string
+          status: string
+          total_bank_balance: number | null
+          total_system_balance: number | null
+          updated_at: string
+        }
+        Insert: {
+          account_id: string
+          company_id: string
+          created_at?: string
+          difference_amount?: number | null
+          id?: string
+          period_end: string
+          period_start: string
+          reconciled_by?: string | null
+          reconciliation_date?: string
+          status?: string
+          total_bank_balance?: number | null
+          total_system_balance?: number | null
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          company_id?: string
+          created_at?: string
+          difference_amount?: number | null
+          id?: string
+          period_end?: string
+          period_start?: string
+          reconciled_by?: string | null
+          reconciliation_date?: string
+          status?: string
+          total_bank_balance?: number | null
+          total_system_balance?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_reconciliations_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "financial_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_statement_items: {
+        Row: {
+          amount: number
+          balance: number | null
+          created_at: string
+          description: string
+          document_number: string | null
+          id: string
+          matched_transaction_id: string | null
+          reconciliation_id: string
+          transaction_date: string
+        }
+        Insert: {
+          amount: number
+          balance?: number | null
+          created_at?: string
+          description: string
+          document_number?: string | null
+          id?: string
+          matched_transaction_id?: string | null
+          reconciliation_id: string
+          transaction_date: string
+        }
+        Update: {
+          amount?: number
+          balance?: number | null
+          created_at?: string
+          description?: string
+          document_number?: string | null
+          id?: string
+          matched_transaction_id?: string | null
+          reconciliation_id?: string
+          transaction_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_statement_items_reconciliation_id_fkey"
+            columns: ["reconciliation_id"]
+            isOneToOne: false
+            referencedRelation: "bank_reconciliations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       barcode_entries: {
         Row: {
           barcode: string
