@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2, Users, Calendar } from "lucide-react";
 import { ProjectForm } from "./ProjectForm";
+import { ProjectMemberManager } from "./ProjectMemberManager";
+import { ProjectComments } from "./ProjectComments";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
@@ -13,6 +15,7 @@ import { Progress } from "@/components/ui/progress";
 export const ProjectList = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [selectedProjectForDetails, setSelectedProjectForDetails] = useState<any>(null);
   const queryClient = useQueryClient();
 
   const { data: projects, isLoading } = useQuery({
