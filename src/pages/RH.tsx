@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { 
   Users, 
   Clock, 
@@ -14,8 +15,19 @@ import {
   TrendingUp,
   AlertCircle
 } from "lucide-react";
+import { EmployeeList } from "@/components/hr/EmployeeList";
+import { EmployeeForm } from "@/components/hr/EmployeeForm";
+import { useState } from "react";
 
 const RH = () => {
+  const [isNewEmployeeOpen, setIsNewEmployeeOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleEmployeeAdded = () => {
+    setRefreshKey(prev => prev + 1);
+    setIsNewEmployeeOpen(false);
+  };
+
   return (
     <Layout>
       <div className="space-y-6">
@@ -28,10 +40,20 @@ const RH = () => {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button>
-              <UserPlus className="w-4 h-4 mr-2" />
-              Novo Funcionário
-            </Button>
+            <Dialog open={isNewEmployeeOpen} onOpenChange={setIsNewEmployeeOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <UserPlus className="w-4 h-4 mr-2" />
+                  Novo Funcionário
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl">
+                <EmployeeForm
+                  onSuccess={handleEmployeeAdded}
+                  onCancel={() => setIsNewEmployeeOpen(false)}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
@@ -234,19 +256,7 @@ const RH = () => {
           </TabsContent>
 
           <TabsContent value="funcionarios" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Gestão de Funcionários</CardTitle>
-                <CardDescription>
-                  Cadastro e gerenciamento de colaboradores
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-center text-muted-foreground py-8">
-                  Funcionalidade em desenvolvimento...
-                </p>
-              </CardContent>
-            </Card>
+            <EmployeeList key={refreshKey} onEmployeeAdded={handleEmployeeAdded} />
           </TabsContent>
 
           <TabsContent value="ponto" className="space-y-4">
