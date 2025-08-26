@@ -83,6 +83,17 @@ export function FinancialAccountManager() {
 
   const onSubmit = async (data: AccountFormData) => {
     try {
+      // Get user's company_id first
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('company_id')
+        .eq('id', (await supabase.auth.getUser()).data.user?.id)
+        .single();
+
+      if (profileError || !profile?.company_id) {
+        throw new Error('Erro ao obter informações da empresa');
+      }
+
       if (editingAccount) {
         const { error } = await supabase
           .from('financial_accounts')
@@ -96,9 +107,18 @@ export function FinancialAccountManager() {
           description: "Conta atualizada com sucesso"
         });
       } else {
+        const insertData = {
+          name: data.name,
+          account_type: data.account_type,
+          account_number: data.account_number || null,
+          bank_name: data.bank_name || null,
+          balance: data.balance,
+          company_id: profile.company_id
+        };
+
         const { error } = await supabase
           .from('financial_accounts')
-          .insert(data);
+          .insert([insertData]);
 
         if (error) throw error;
 

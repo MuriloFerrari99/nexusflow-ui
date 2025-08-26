@@ -220,7 +220,12 @@ export function ConciliacaoBancaria() {
                     <Button 
                       variant="outline" 
                       size="icon"
-                      onClick={() => window.location.hash = '#contas'}
+                      onClick={() => {
+                        // Navigate to accounts tab
+                        const tabs = document.querySelector('[role="tablist"]');
+                        const accountsTab = tabs?.querySelector('[value="contas"]') as HTMLElement;
+                        accountsTab?.click();
+                      }}
                       title="Gerenciar Contas"
                     >
                       <Settings className="h-4 w-4" />
