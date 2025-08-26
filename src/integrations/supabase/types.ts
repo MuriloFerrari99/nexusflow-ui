@@ -2888,6 +2888,7 @@ export type Database = {
           description: string
           id: string
           payment_method: string | null
+          project_id: string | null
           reference: string | null
           status: string | null
           tags: string[] | null
@@ -2905,6 +2906,7 @@ export type Database = {
           description: string
           id?: string
           payment_method?: string | null
+          project_id?: string | null
           reference?: string | null
           status?: string | null
           tags?: string[] | null
@@ -2922,6 +2924,7 @@ export type Database = {
           description?: string
           id?: string
           payment_method?: string | null
+          project_id?: string | null
           reference?: string | null
           status?: string | null
           tags?: string[] | null
@@ -2942,6 +2945,13 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "financial_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_transactions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
@@ -6721,6 +6731,63 @@ export type Database = {
           },
         ]
       }
+      project_budgets: {
+        Row: {
+          actual_amount: number
+          budget_type: string
+          category_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          planned_amount: number
+          project_id: string
+          updated_at: string
+        }
+        Insert: {
+          actual_amount?: number
+          budget_type: string
+          category_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          planned_amount?: number
+          project_id: string
+          updated_at?: string
+        }
+        Update: {
+          actual_amount?: number
+          budget_type?: string
+          category_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          planned_amount?: number
+          project_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_budgets_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "financial_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_budgets_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       project_members: {
         Row: {
           added_at: string
@@ -9566,6 +9633,18 @@ export type Database = {
       get_current_user_role_cached: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_project_financial_summary: {
+        Args: { p_project_id: string }
+        Returns: {
+          margem_liquida: number
+          margem_percentual: number
+          orcamento_custos: number
+          orcamento_receita: number
+          percentual_orcamento_usado: number
+          total_custos: number
+          total_receita: number
+        }[]
       }
       get_team_members: {
         Args: { manager_id?: string }

@@ -8,6 +8,8 @@ import { Plus, Edit, Trash2, Users, Calendar, Eye } from "lucide-react";
 import { ProjectForm } from "./ProjectForm";
 import { ProjectMemberManager } from "./ProjectMemberManager";
 import { ProjectComments } from "./ProjectComments";
+import { ProjectDRE } from "./ProjectDRE";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { Progress } from "@/components/ui/progress";
@@ -238,7 +240,7 @@ export const ProjectList = () => {
 
       {/* Project Details Dialog */}
       <Dialog open={!!selectedProjectForDetails} onOpenChange={(open) => !open && setSelectedProjectForDetails(null)}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{selectedProjectForDetails?.name}</DialogTitle>
             <DialogDescription>
@@ -247,51 +249,65 @@ export const ProjectList = () => {
           </DialogHeader>
           
           {selectedProjectForDetails && (
-            <div className="space-y-6">
-              <div className="grid gap-6 md:grid-cols-2">
-                <ProjectMemberManager projectId={selectedProjectForDetails.id} />
-                
-                <div className="space-y-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Informações do Projeto</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Status:</span>
-                        <Badge variant="secondary" className={getStatusColor(selectedProjectForDetails.status)}>
-                          {getStatusLabel(selectedProjectForDetails.status)}
-                        </Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Prioridade:</span>
-                        <Badge variant={selectedProjectForDetails.priority === 'high' ? 'destructive' : 'secondary'}>
-                          {getPriorityLabel(selectedProjectForDetails.priority)}
-                        </Badge>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Progresso:</span>
-                        <span>{Math.round(selectedProjectForDetails.progress || 0)}%</span>
-                      </div>
-                      {selectedProjectForDetails.start_date && (
+            <Tabs defaultValue="info" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="info">Informações</TabsTrigger>
+                <TabsTrigger value="financeiro">DRE do Projeto</TabsTrigger>
+                <TabsTrigger value="comments">Comentários</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="info" className="space-y-6">
+                <div className="grid gap-6 md:grid-cols-2">
+                  <ProjectMemberManager projectId={selectedProjectForDetails.id} />
+                  
+                  <div className="space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Informações do Projeto</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-3">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Início:</span>
-                          <span>{new Date(selectedProjectForDetails.start_date).toLocaleDateString('pt-BR')}</span>
+                          <span className="text-muted-foreground">Status:</span>
+                          <Badge variant="secondary" className={getStatusColor(selectedProjectForDetails.status)}>
+                            {getStatusLabel(selectedProjectForDetails.status)}
+                          </Badge>
                         </div>
-                      )}
-                      {selectedProjectForDetails.end_date && (
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Prazo:</span>
-                          <span>{new Date(selectedProjectForDetails.end_date).toLocaleDateString('pt-BR')}</span>
+                          <span className="text-muted-foreground">Prioridade:</span>
+                          <Badge variant={selectedProjectForDetails.priority === 'high' ? 'destructive' : 'secondary'}>
+                            {getPriorityLabel(selectedProjectForDetails.priority)}
+                          </Badge>
                         </div>
-                      )}
-                    </CardContent>
-                  </Card>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">Progresso:</span>
+                          <span>{Math.round(selectedProjectForDetails.progress || 0)}%</span>
+                        </div>
+                        {selectedProjectForDetails.start_date && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Início:</span>
+                            <span>{new Date(selectedProjectForDetails.start_date).toLocaleDateString('pt-BR')}</span>
+                          </div>
+                        )}
+                        {selectedProjectForDetails.end_date && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Prazo:</span>
+                            <span>{new Date(selectedProjectForDetails.end_date).toLocaleDateString('pt-BR')}</span>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </div>
                 </div>
-              </div>
-              
-              <ProjectComments projectId={selectedProjectForDetails.id} entityType="project" />
-            </div>
+              </TabsContent>
+
+              <TabsContent value="financeiro" className="space-y-6">
+                <ProjectDRE projectId={selectedProjectForDetails.id} />
+              </TabsContent>
+
+              <TabsContent value="comments" className="space-y-6">
+                <ProjectComments projectId={selectedProjectForDetails.id} entityType="project" />
+              </TabsContent>
+            </Tabs>
           )}
         </DialogContent>
       </Dialog>

@@ -18,11 +18,12 @@ const Projetos = () => {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="projects">Projetos</TabsTrigger>
             <TabsTrigger value="kanban">Kanban</TabsTrigger>
             <TabsTrigger value="gantt">Gantt</TabsTrigger>
+            <TabsTrigger value="financeiro">Financeiro</TabsTrigger>
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-4">
@@ -39,6 +40,12 @@ const Projetos = () => {
 
           <TabsContent value="gantt" className="space-y-4">
             <ProjectGantt />
+          </TabsContent>
+
+          <TabsContent value="financeiro" className="space-y-4">
+            <div className="text-center py-8 text-muted-foreground">
+              Selecione um projeto específico para ver sua DRE.
+            </div>
           </TabsContent>
         </Tabs>
       </div>
