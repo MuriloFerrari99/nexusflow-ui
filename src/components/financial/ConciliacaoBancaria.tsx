@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { Upload, Download, CheckCircle, AlertCircle, Zap, RotateCcw } from "lucide-react";
+import { Upload, Download, CheckCircle, AlertCircle, Zap, RotateCcw, Settings } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface BankTransaction {
   id: string;
@@ -47,12 +48,32 @@ export function ConciliacaoBancaria() {
   const [systemTransactions, setSystemTransactions] = useState<SystemTransaction[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Mock data para demonstração
-  const accounts = [
-    { id: "1", name: "Conta Corrente Bradesco", number: "1234-5" },
-    { id: "2", name: "Conta Poupança Itaú", number: "5678-9" },
-    { id: "3", name: "Conta Empresarial Santander", number: "9012-3" }
-  ];
+  const [accounts, setAccounts] = useState<any[]>([]);
+
+  // Carregar contas reais do banco de dados
+  useEffect(() => {
+    loadAccounts();
+  }, []);
+
+  const loadAccounts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('financial_accounts')
+        .select('id, name, account_number, bank_name')
+        .eq('is_active', true)
+        .in('account_type', ['checking', 'savings']); // Apenas contas bancárias
+
+      if (error) throw error;
+      setAccounts(data || []);
+    } catch (error) {
+      console.error('Error loading accounts:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao carregar contas",
+        variant: "destructive"
+      });
+    }
+  };
 
   const mockSystemTransactions: SystemTransaction[] = [
     { id: "s1", date: "2025-01-15", description: "Recebimento Cliente A", amount: 2500.00, type: "income" },
@@ -178,18 +199,33 @@ export function ConciliacaoBancaria() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="account">Conta Bancária</Label>
-                  <Select value={selectedAccount} onValueChange={setSelectedAccount}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione uma conta" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {accounts.map((account) => (
-                        <SelectItem key={account.id} value={account.id}>
-                          {account.name} - {account.number}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="flex gap-2">
+                    <Select value={selectedAccount} onValueChange={setSelectedAccount}>
+                      <SelectTrigger className="flex-1">
+                        <SelectValue placeholder="Selecione uma conta" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {accounts.map((account) => (
+                          <SelectItem key={account.id} value={account.id}>
+                            {account.name} {account.bank_name && `- ${account.bank_name}`} {account.account_number && `(${account.account_number})`}
+                          </SelectItem>
+                        ))}
+                        {accounts.length === 0 && (
+                          <SelectItem value="none" disabled>
+                            Nenhuma conta bancária encontrada
+                          </SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={() => window.location.hash = '#contas'}
+                      title="Gerenciar Contas"
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
