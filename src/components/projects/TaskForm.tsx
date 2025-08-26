@@ -62,7 +62,7 @@ export const TaskForm = ({ task, projectId, onClose }: TaskFormProps) => {
     }
   });
 
-  const { data: userProfile } = useQueryClient().getQueryData(['user-profile']) as any;
+  const userProfile = useQueryClient().getQueryData(['user-profile']) as any;
 
   const saveTask = useMutation({
     mutationFn: async (data: TaskFormData) => {
