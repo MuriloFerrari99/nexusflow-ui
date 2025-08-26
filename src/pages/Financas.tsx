@@ -108,7 +108,7 @@ export default function Financas() {
           </TabsContent>
 
           <TabsContent value="conciliacao" className="space-y-4">
-            <ConciliacaoBancaria />
+            <ConciliacaoBancaria onNavigateToAccounts={() => setActiveTab("contas")} />
           </TabsContent>
         </Tabs>
 

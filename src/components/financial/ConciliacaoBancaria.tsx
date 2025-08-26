@@ -18,6 +18,10 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+interface ConciliacaoBancariaProps {
+  onNavigateToAccounts: () => void;
+}
+
 interface BankTransaction {
   id: string;
   date: string;
@@ -38,7 +42,7 @@ interface SystemTransaction {
   matchedWith?: string;
 }
 
-export function ConciliacaoBancaria() {
+export function ConciliacaoBancaria({ onNavigateToAccounts }: ConciliacaoBancariaProps) {
   const { toast } = useToast();
   const [selectedAccount, setSelectedAccount] = useState("");
   const [periodStart, setPeriodStart] = useState<Date>();
@@ -220,12 +224,7 @@ export function ConciliacaoBancaria() {
                     <Button 
                       variant="outline" 
                       size="icon"
-                      onClick={() => {
-                        // Navigate to accounts tab
-                        const tabs = document.querySelector('[role="tablist"]');
-                        const accountsTab = tabs?.querySelector('[value="contas"]') as HTMLElement;
-                        accountsTab?.click();
-                      }}
+                      onClick={onNavigateToAccounts}
                       title="Gerenciar Contas"
                     >
                       <Settings className="h-4 w-4" />
