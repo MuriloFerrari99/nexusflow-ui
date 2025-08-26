@@ -2,7 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,7 +46,26 @@ export const ProjectForm = ({ project, onClose }: ProjectFormProps) => {
     },
   });
 
-  const { data: userProfile } = useQueryClient().getQueryData(['user-profile']) as any;
+  const { data: userAuth } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) throw error;
+      return user;
+    }
+  });
+
+  const { data: userCompany } = useQuery({
+    queryKey: ['user-company'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .rpc('get_user_company_id')
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!userAuth
+  });
 
   const createProject = useMutation({
     mutationFn: async (data: ProjectFormData) => {
@@ -69,8 +88,8 @@ export const ProjectForm = ({ project, onClose }: ProjectFormProps) => {
       } else {
         const projectData = {
           ...baseData,
-          company_id: userProfile?.company_id,
-          created_by: userProfile?.id,
+          company_id: userCompany,
+          created_by: userAuth?.id,
         };
         const { error } = await supabase
           .from('projects')
