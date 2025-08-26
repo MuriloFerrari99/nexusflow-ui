@@ -9534,6 +9534,10 @@ export type Database = {
         Args: { target_company_id: string; user_uuid?: string }
         Returns: boolean
       }
+      can_edit_project: {
+        Args: { project_id_param: string; user_id_param?: string }
+        Returns: boolean
+      }
       can_manage_user: {
         Args: { target_user_id: string }
         Returns: boolean
@@ -9619,6 +9623,14 @@ export type Database = {
       }
       is_department_supervisor: {
         Args: { dept_id?: string; user_uuid?: string }
+        Returns: boolean
+      }
+      is_project_creator: {
+        Args: { project_id_param: string; user_id_param?: string }
+        Returns: boolean
+      }
+      is_project_member: {
+        Args: { project_id_param: string; user_id_param?: string }
         Returns: boolean
       }
       is_user_manager_of: {
