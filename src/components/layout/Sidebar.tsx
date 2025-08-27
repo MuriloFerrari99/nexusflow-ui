@@ -105,6 +105,20 @@ const menuItems = [
     path: "/documentos",
     badge: "Novo",
   },
+  {
+    title: "Fiscal",
+    icon: FileText,
+    path: "/fiscal",
+    badge: "novo",
+    subItems: [
+      { title: "NF-e", path: "/fiscal" },
+      { title: "NFS-e", path: "/fiscal" },
+      { title: "SPED", path: "/fiscal" },
+      { title: "Tributação", path: "/fiscal" },
+      { title: "Auditoria", path: "/fiscal" },
+      { title: "Configurações", path: "/fiscal" },
+    ],
+  },
 ];
 
 export const Sidebar = ({ isCollapsed, onToggle }: SidebarProps) => {
