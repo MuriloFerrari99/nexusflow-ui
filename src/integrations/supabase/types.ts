@@ -3296,6 +3296,341 @@ export type Database = {
           },
         ]
       }
+      fiscal_certificates: {
+        Row: {
+          alias_name: string
+          cert_data_encrypted: string | null
+          company_id: string
+          created_at: string | null
+          created_by: string
+          environment: string | null
+          fiscal_company_id: string | null
+          id: string
+          is_active: boolean | null
+          password_encrypted: string | null
+          serial_number: string | null
+          subject_name: string | null
+          type: string | null
+          updated_at: string | null
+          valid_from: string | null
+          valid_to: string | null
+        }
+        Insert: {
+          alias_name: string
+          cert_data_encrypted?: string | null
+          company_id: string
+          created_at?: string | null
+          created_by: string
+          environment?: string | null
+          fiscal_company_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          password_encrypted?: string | null
+          serial_number?: string | null
+          subject_name?: string | null
+          type?: string | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+        }
+        Update: {
+          alias_name?: string
+          cert_data_encrypted?: string | null
+          company_id?: string
+          created_at?: string | null
+          created_by?: string
+          environment?: string | null
+          fiscal_company_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          password_encrypted?: string | null
+          serial_number?: string | null
+          subject_name?: string | null
+          type?: string | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fiscal_certificates_fiscal_company_id_fkey"
+            columns: ["fiscal_company_id"]
+            isOneToOne: false
+            referencedRelation: "fiscal_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fiscal_companies: {
+        Row: {
+          a1_cert_alias: string | null
+          a1_cert_encrypted: string | null
+          a1_cert_password_encrypted: string | null
+          address_bairro: string | null
+          address_cep: string | null
+          address_complemento: string | null
+          address_logradouro: string | null
+          address_municipio_codigo: string | null
+          address_municipio_nome: string | null
+          address_numero: string | null
+          address_uf: string | null
+          cnae_principal: string | null
+          cnpj: string
+          company_id: string
+          created_at: string | null
+          crt: number
+          environment: string | null
+          id: string
+          ie: string | null
+          im: string | null
+          name: string
+          nfe_next_number: number | null
+          nfe_series: number | null
+          nfse_next_number: number | null
+          nfse_series: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          a1_cert_alias?: string | null
+          a1_cert_encrypted?: string | null
+          a1_cert_password_encrypted?: string | null
+          address_bairro?: string | null
+          address_cep?: string | null
+          address_complemento?: string | null
+          address_logradouro?: string | null
+          address_municipio_codigo?: string | null
+          address_municipio_nome?: string | null
+          address_numero?: string | null
+          address_uf?: string | null
+          cnae_principal?: string | null
+          cnpj: string
+          company_id: string
+          created_at?: string | null
+          crt?: number
+          environment?: string | null
+          id?: string
+          ie?: string | null
+          im?: string | null
+          name: string
+          nfe_next_number?: number | null
+          nfe_series?: number | null
+          nfse_next_number?: number | null
+          nfse_series?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          a1_cert_alias?: string | null
+          a1_cert_encrypted?: string | null
+          a1_cert_password_encrypted?: string | null
+          address_bairro?: string | null
+          address_cep?: string | null
+          address_complemento?: string | null
+          address_logradouro?: string | null
+          address_municipio_codigo?: string | null
+          address_municipio_nome?: string | null
+          address_numero?: string | null
+          address_uf?: string | null
+          cnae_principal?: string | null
+          cnpj?: string
+          company_id?: string
+          created_at?: string | null
+          crt?: number
+          environment?: string | null
+          id?: string
+          ie?: string | null
+          im?: string | null
+          name?: string
+          nfe_next_number?: number | null
+          nfe_series?: number | null
+          nfse_next_number?: number | null
+          nfse_series?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      fiscal_events: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string
+          event: string
+          id: string
+          ip_address: unknown | null
+          message: string | null
+          payload_masked: Json | null
+          response_masked: Json | null
+          success: boolean | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type: string
+          event: string
+          id?: string
+          ip_address?: unknown | null
+          message?: string | null
+          payload_masked?: Json | null
+          response_masked?: Json | null
+          success?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string
+          event?: string
+          id?: string
+          ip_address?: unknown | null
+          message?: string | null
+          payload_masked?: Json | null
+          response_masked?: Json | null
+          success?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      fiscal_providers: {
+        Row: {
+          active: boolean | null
+          company_id: string
+          created_at: string | null
+          credentials_encrypted: Json | null
+          endpoints: Json | null
+          id: string
+          municipio_codigo: string | null
+          name: string
+          provider: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          company_id: string
+          created_at?: string | null
+          credentials_encrypted?: Json | null
+          endpoints?: Json | null
+          id?: string
+          municipio_codigo?: string | null
+          name: string
+          provider: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          company_id?: string
+          created_at?: string | null
+          credentials_encrypted?: Json | null
+          endpoints?: Json | null
+          id?: string
+          municipio_codigo?: string | null
+          name?: string
+          provider?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      fiscal_tax_profiles: {
+        Row: {
+          aliquota_cofins: number | null
+          aliquota_icms: number | null
+          aliquota_ipi: number | null
+          aliquota_iss: number | null
+          aliquota_pis: number | null
+          carga_efetiva_percent: number | null
+          cest: string | null
+          cfop_entrada: string | null
+          cfop_saida: string | null
+          company_id: string
+          created_at: string | null
+          csosn: string | null
+          cst_icms: string | null
+          fcp_percent: number | null
+          id: string
+          is_active: boolean | null
+          iss_municipio_codigo: string | null
+          mva_st: number | null
+          name: string
+          natureza_operacao: string | null
+          ncm: string | null
+          product_id: string | null
+          reducao_base_icms: number | null
+          regime: string | null
+          service_id: string | null
+          updated_at: string | null
+          valid_from: string | null
+          valid_to: string | null
+        }
+        Insert: {
+          aliquota_cofins?: number | null
+          aliquota_icms?: number | null
+          aliquota_ipi?: number | null
+          aliquota_iss?: number | null
+          aliquota_pis?: number | null
+          carga_efetiva_percent?: number | null
+          cest?: string | null
+          cfop_entrada?: string | null
+          cfop_saida?: string | null
+          company_id: string
+          created_at?: string | null
+          csosn?: string | null
+          cst_icms?: string | null
+          fcp_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          iss_municipio_codigo?: string | null
+          mva_st?: number | null
+          name: string
+          natureza_operacao?: string | null
+          ncm?: string | null
+          product_id?: string | null
+          reducao_base_icms?: number | null
+          regime?: string | null
+          service_id?: string | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+        }
+        Update: {
+          aliquota_cofins?: number | null
+          aliquota_icms?: number | null
+          aliquota_ipi?: number | null
+          aliquota_iss?: number | null
+          aliquota_pis?: number | null
+          carga_efetiva_percent?: number | null
+          cest?: string | null
+          cfop_entrada?: string | null
+          cfop_saida?: string | null
+          company_id?: string
+          created_at?: string | null
+          csosn?: string | null
+          cst_icms?: string | null
+          fcp_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          iss_municipio_codigo?: string | null
+          mva_st?: number | null
+          name?: string
+          natureza_operacao?: string | null
+          ncm?: string | null
+          product_id?: string | null
+          reducao_base_icms?: number | null
+          regime?: string | null
+          service_id?: string | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+        }
+        Relationships: []
+      }
       flow_automations: {
         Row: {
           actions: Json
@@ -5795,6 +6130,270 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nfe_headers: {
+        Row: {
+          chave: string | null
+          codigo_status: string | null
+          company_id: string
+          contingencia: Json | null
+          created_at: string | null
+          danfe_pdf_url: string | null
+          destinatario: Json | null
+          dhrecbto: string | null
+          emit_xml: string | null
+          fiscal_company_id: string | null
+          id: string
+          motivo_status: string | null
+          numero: number
+          proc_xml: string | null
+          protocolo: string | null
+          rejeicoes: Json | null
+          serie: number
+          status: string | null
+          totais: Json | null
+          tp_ambiente: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          chave?: string | null
+          codigo_status?: string | null
+          company_id: string
+          contingencia?: Json | null
+          created_at?: string | null
+          danfe_pdf_url?: string | null
+          destinatario?: Json | null
+          dhrecbto?: string | null
+          emit_xml?: string | null
+          fiscal_company_id?: string | null
+          id?: string
+          motivo_status?: string | null
+          numero: number
+          proc_xml?: string | null
+          protocolo?: string | null
+          rejeicoes?: Json | null
+          serie: number
+          status?: string | null
+          totais?: Json | null
+          tp_ambiente?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          chave?: string | null
+          codigo_status?: string | null
+          company_id?: string
+          contingencia?: Json | null
+          created_at?: string | null
+          danfe_pdf_url?: string | null
+          destinatario?: Json | null
+          dhrecbto?: string | null
+          emit_xml?: string | null
+          fiscal_company_id?: string | null
+          id?: string
+          motivo_status?: string | null
+          numero?: number
+          proc_xml?: string | null
+          protocolo?: string | null
+          rejeicoes?: Json | null
+          serie?: number
+          status?: string | null
+          totais?: Json | null
+          tp_ambiente?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nfe_headers_fiscal_company_id_fkey"
+            columns: ["fiscal_company_id"]
+            isOneToOne: false
+            referencedRelation: "fiscal_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nfe_items: {
+        Row: {
+          aliquota_icms: number | null
+          base_icms: number | null
+          base_st: number | null
+          carga_efetiva_valor: number | null
+          cfop: string | null
+          codigo_produto: string | null
+          cofins_aliquota: number | null
+          cofins_valor: number | null
+          created_at: string | null
+          cst_csosn: string | null
+          desconto: number | null
+          descricao: string
+          fcp_valor: number | null
+          frete_rateado: number | null
+          id: string
+          ipi_aliquota: number | null
+          ipi_valor: number | null
+          item_number: number
+          mva_st: number | null
+          ncm: string | null
+          nfe_id: string
+          outras_despesas: number | null
+          pis_aliquota: number | null
+          pis_valor: number | null
+          preco_unitario: number
+          product_id: string | null
+          qtd: number
+          unidade: string
+          valor_icms: number | null
+          valor_st: number | null
+          valor_total: number
+        }
+        Insert: {
+          aliquota_icms?: number | null
+          base_icms?: number | null
+          base_st?: number | null
+          carga_efetiva_valor?: number | null
+          cfop?: string | null
+          codigo_produto?: string | null
+          cofins_aliquota?: number | null
+          cofins_valor?: number | null
+          created_at?: string | null
+          cst_csosn?: string | null
+          desconto?: number | null
+          descricao: string
+          fcp_valor?: number | null
+          frete_rateado?: number | null
+          id?: string
+          ipi_aliquota?: number | null
+          ipi_valor?: number | null
+          item_number: number
+          mva_st?: number | null
+          ncm?: string | null
+          nfe_id: string
+          outras_despesas?: number | null
+          pis_aliquota?: number | null
+          pis_valor?: number | null
+          preco_unitario: number
+          product_id?: string | null
+          qtd: number
+          unidade: string
+          valor_icms?: number | null
+          valor_st?: number | null
+          valor_total: number
+        }
+        Update: {
+          aliquota_icms?: number | null
+          base_icms?: number | null
+          base_st?: number | null
+          carga_efetiva_valor?: number | null
+          cfop?: string | null
+          codigo_produto?: string | null
+          cofins_aliquota?: number | null
+          cofins_valor?: number | null
+          created_at?: string | null
+          cst_csosn?: string | null
+          desconto?: number | null
+          descricao?: string
+          fcp_valor?: number | null
+          frete_rateado?: number | null
+          id?: string
+          ipi_aliquota?: number | null
+          ipi_valor?: number | null
+          item_number?: number
+          mva_st?: number | null
+          ncm?: string | null
+          nfe_id?: string
+          outras_despesas?: number | null
+          pis_aliquota?: number | null
+          pis_valor?: number | null
+          preco_unitario?: number
+          product_id?: string | null
+          qtd?: number
+          unidade?: string
+          valor_icms?: number | null
+          valor_st?: number | null
+          valor_total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nfe_items_nfe_id_fkey"
+            columns: ["nfe_id"]
+            isOneToOne: false
+            referencedRelation: "nfe_headers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      nfse_headers: {
+        Row: {
+          codigo_status: string | null
+          company_id: string
+          created_at: string | null
+          danfse_pdf_url: string | null
+          fiscal_company_id: string | null
+          id: string
+          motivo_status: string | null
+          municipio_codigo: string
+          nfse_numero: number | null
+          protocolo: string | null
+          rps_numero: number
+          rps_serie: string | null
+          servicos: Json | null
+          status: string | null
+          tomador: Json | null
+          totais: Json | null
+          updated_at: string | null
+          xml_envio: string | null
+          xml_retorno: string | null
+        }
+        Insert: {
+          codigo_status?: string | null
+          company_id: string
+          created_at?: string | null
+          danfse_pdf_url?: string | null
+          fiscal_company_id?: string | null
+          id?: string
+          motivo_status?: string | null
+          municipio_codigo: string
+          nfse_numero?: number | null
+          protocolo?: string | null
+          rps_numero: number
+          rps_serie?: string | null
+          servicos?: Json | null
+          status?: string | null
+          tomador?: Json | null
+          totais?: Json | null
+          updated_at?: string | null
+          xml_envio?: string | null
+          xml_retorno?: string | null
+        }
+        Update: {
+          codigo_status?: string | null
+          company_id?: string
+          created_at?: string | null
+          danfse_pdf_url?: string | null
+          fiscal_company_id?: string | null
+          id?: string
+          motivo_status?: string | null
+          municipio_codigo?: string
+          nfse_numero?: number | null
+          protocolo?: string | null
+          rps_numero?: number
+          rps_serie?: string | null
+          servicos?: Json | null
+          status?: string | null
+          tomador?: Json | null
+          totais?: Json | null
+          updated_at?: string | null
+          xml_envio?: string | null
+          xml_retorno?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "nfse_headers_fiscal_company_id_fkey"
+            columns: ["fiscal_company_id"]
+            isOneToOne: false
+            referencedRelation: "fiscal_companies"
             referencedColumns: ["id"]
           },
         ]
@@ -8514,6 +9113,57 @@ export type Database = {
         }
         Relationships: []
       }
+      sped_exports: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          created_by: string
+          file_size: number | null
+          file_url: string | null
+          id: string
+          period_end: string
+          period_start: string
+          processing_log: Json | null
+          records_count: number | null
+          status: string | null
+          type: string
+          updated_at: string | null
+          validation_errors: Json | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          created_by: string
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          period_end: string
+          period_start: string
+          processing_log?: Json | null
+          records_count?: number | null
+          status?: string | null
+          type: string
+          updated_at?: string | null
+          validation_errors?: Json | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          created_by?: string
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          period_end?: string
+          period_start?: string
+          processing_log?: Json | null
+          records_count?: number | null
+          status?: string | null
+          type?: string
+          updated_at?: string | null
+          validation_errors?: Json | null
+        }
+        Relationships: []
+      }
       stage_automations: {
         Row: {
           actions: Json
@@ -10179,6 +10829,14 @@ export type Database = {
           p_old_values?: Json
         }
         Returns: string
+      }
+      generate_nfe_number: {
+        Args: { p_fiscal_company_id: string; p_serie?: number }
+        Returns: number
+      }
+      generate_rps_number: {
+        Args: { p_fiscal_company_id: string }
+        Returns: number
       }
       get_current_user_role_cached: {
         Args: Record<PropertyKey, never>

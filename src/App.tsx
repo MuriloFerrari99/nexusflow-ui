@@ -13,6 +13,7 @@ import Projetos from "./pages/Projetos";
 import Relatorios from "./pages/Relatorios";
 import Cobrancas from "./pages/Cobrancas";
 import Documentos from "./pages/Documentos";
+import Fiscal from "./pages/Fiscal";
 import NotFound from "./pages/NotFound";
 
 // Create QueryClient instance outside component to prevent recreation
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/relatorios" element={<Relatorios />} />
           <Route path="/cobrancas" element={<Cobrancas />} />
           <Route path="/documentos" element={<Documentos />} />
+          <Route path="/fiscal" element={<Fiscal />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
