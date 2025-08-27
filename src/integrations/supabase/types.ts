@@ -1291,6 +1291,60 @@ export type Database = {
         }
         Relationships: []
       }
+      channels: {
+        Row: {
+          admin_fixed_fee: number | null
+          cofins_percent: number | null
+          company_id: string
+          created_at: string | null
+          gateway_percent: number | null
+          icms_percent: number | null
+          id: string
+          is_active: boolean | null
+          iss_percent: number | null
+          marketplace_percent: number | null
+          name: string
+          pis_percent: number | null
+          sales_commission_percent: number | null
+          tax_burden_percent: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          admin_fixed_fee?: number | null
+          cofins_percent?: number | null
+          company_id: string
+          created_at?: string | null
+          gateway_percent?: number | null
+          icms_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          iss_percent?: number | null
+          marketplace_percent?: number | null
+          name: string
+          pis_percent?: number | null
+          sales_commission_percent?: number | null
+          tax_burden_percent?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          admin_fixed_fee?: number | null
+          cofins_percent?: number | null
+          company_id?: string
+          created_at?: string | null
+          gateway_percent?: number | null
+          icms_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          iss_percent?: number | null
+          marketplace_percent?: number | null
+          name?: string
+          pis_percent?: number | null
+          sales_commission_percent?: number | null
+          tax_burden_percent?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       checklist_templates: {
         Row: {
           checklist_items: Json
@@ -6438,6 +6492,50 @@ export type Database = {
           },
         ]
       }
+      price_history: {
+        Row: {
+          changed_at: string | null
+          changed_by: string | null
+          channel: string | null
+          company_id: string
+          id: string
+          new_price: number | null
+          old_price: number | null
+          product_id: string
+          reason: string | null
+        }
+        Insert: {
+          changed_at?: string | null
+          changed_by?: string | null
+          channel?: string | null
+          company_id: string
+          id?: string
+          new_price?: number | null
+          old_price?: number | null
+          product_id: string
+          reason?: string | null
+        }
+        Update: {
+          changed_at?: string | null
+          changed_by?: string | null
+          channel?: string | null
+          company_id?: string
+          id?: string
+          new_price?: number | null
+          old_price?: number | null
+          product_id?: string
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_history_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pricing_rules: {
         Row: {
           company_id: string
@@ -6497,6 +6595,53 @@ export type Database = {
           },
         ]
       }
+      product_approvals: {
+        Row: {
+          company_id: string
+          created_at: string | null
+          decision_by: string | null
+          decision_reason: string | null
+          id: string
+          product_id: string
+          proposed_by: string
+          proposed_price: number
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string | null
+          decision_by?: string | null
+          decision_reason?: string | null
+          id?: string
+          product_id: string
+          proposed_by: string
+          proposed_price: number
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string | null
+          decision_by?: string | null
+          decision_reason?: string | null
+          id?: string
+          product_id?: string
+          proposed_by?: string
+          proposed_price?: number
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_approvals_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_bundles: {
         Row: {
           bundle_discount_type: string | null
@@ -6547,78 +6692,197 @@ export type Database = {
           },
         ]
       }
+      product_pricing_rules: {
+        Row: {
+          admin_fixed_fee: number | null
+          channel: string | null
+          cofins_percent: number | null
+          company_id: string
+          created_at: string | null
+          gateway_percent: number | null
+          icms_percent: number | null
+          id: string
+          iss_percent: number | null
+          margin_target_percent: number | null
+          marketplace_percent: number | null
+          markup_percent: number | null
+          mode: string | null
+          pis_percent: number | null
+          product_id: string | null
+          rounding: string | null
+          rounding_decimals: number | null
+          rounding_ending: string | null
+          sales_commission_percent: number | null
+          target_price: number | null
+          tax_burden_percent: number | null
+          updated_at: string | null
+          valid_from: string | null
+          valid_to: string | null
+        }
+        Insert: {
+          admin_fixed_fee?: number | null
+          channel?: string | null
+          cofins_percent?: number | null
+          company_id: string
+          created_at?: string | null
+          gateway_percent?: number | null
+          icms_percent?: number | null
+          id?: string
+          iss_percent?: number | null
+          margin_target_percent?: number | null
+          marketplace_percent?: number | null
+          markup_percent?: number | null
+          mode?: string | null
+          pis_percent?: number | null
+          product_id?: string | null
+          rounding?: string | null
+          rounding_decimals?: number | null
+          rounding_ending?: string | null
+          sales_commission_percent?: number | null
+          target_price?: number | null
+          tax_burden_percent?: number | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+        }
+        Update: {
+          admin_fixed_fee?: number | null
+          channel?: string | null
+          cofins_percent?: number | null
+          company_id?: string
+          created_at?: string | null
+          gateway_percent?: number | null
+          icms_percent?: number | null
+          id?: string
+          iss_percent?: number | null
+          margin_target_percent?: number | null
+          marketplace_percent?: number | null
+          markup_percent?: number | null
+          mode?: string | null
+          pis_percent?: number | null
+          product_id?: string | null
+          rounding?: string | null
+          rounding_decimals?: number | null
+          rounding_ending?: string | null
+          sales_commission_percent?: number | null
+          target_price?: number | null
+          tax_burden_percent?: number | null
+          updated_at?: string | null
+          valid_from?: string | null
+          valid_to?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_pricing_rules_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           barcode: string | null
-          base_price: number
+          brand: string | null
           category: string
           company_id: string
+          cost_base: number
           cost_price: number | null
           created_at: string | null
           created_by: string | null
           currency: string | null
           current_stock: number | null
           description: string | null
+          ean: string | null
+          freight_unit_cost: number | null
           id: string
           is_active: boolean | null
           is_configurable: boolean | null
           max_stock: number | null
           min_stock: number | null
           name: string
+          ncm: string | null
+          other_variable_cost: number | null
+          packaging_unit_cost: number | null
+          price_current: number | null
+          price_suggested: number | null
           sku: string | null
+          status: string | null
           tax_rate: number | null
           technical_specs: Json | null
           unit: string
           unit_type: string | null
           updated_at: string | null
+          updated_by: string | null
         }
         Insert: {
           barcode?: string | null
-          base_price: number
+          brand?: string | null
           category: string
           company_id: string
+          cost_base: number
           cost_price?: number | null
           created_at?: string | null
           created_by?: string | null
           currency?: string | null
           current_stock?: number | null
           description?: string | null
+          ean?: string | null
+          freight_unit_cost?: number | null
           id?: string
           is_active?: boolean | null
           is_configurable?: boolean | null
           max_stock?: number | null
           min_stock?: number | null
           name: string
+          ncm?: string | null
+          other_variable_cost?: number | null
+          packaging_unit_cost?: number | null
+          price_current?: number | null
+          price_suggested?: number | null
           sku?: string | null
+          status?: string | null
           tax_rate?: number | null
           technical_specs?: Json | null
           unit?: string
           unit_type?: string | null
           updated_at?: string | null
+          updated_by?: string | null
         }
         Update: {
           barcode?: string | null
-          base_price?: number
+          brand?: string | null
           category?: string
           company_id?: string
+          cost_base?: number
           cost_price?: number | null
           created_at?: string | null
           created_by?: string | null
           currency?: string | null
           current_stock?: number | null
           description?: string | null
+          ean?: string | null
+          freight_unit_cost?: number | null
           id?: string
           is_active?: boolean | null
           is_configurable?: boolean | null
           max_stock?: number | null
           min_stock?: number | null
           name?: string
+          ncm?: string | null
+          other_variable_cost?: number | null
+          packaging_unit_cost?: number | null
+          price_current?: number | null
+          price_suggested?: number | null
           sku?: string | null
+          status?: string | null
           tax_rate?: number | null
           technical_specs?: Json | null
           unit?: string
           unit_type?: string | null
           updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: [
           {

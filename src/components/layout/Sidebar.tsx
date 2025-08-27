@@ -41,12 +41,17 @@ const menuItems = [
     ],
   },
   {
+    title: "Produtos",
+    icon: Package,
+    path: "/produtos",
+    badge: "novo",
+  },
+  {
     title: "Estoque",
     icon: Package,
     path: "/estoque",
     badge: "5",
     subItems: [
-      { title: "Produtos", path: "/estoque/produtos" },
       { title: "Movimentações", path: "/estoque/movimentacoes" },
       { title: "Relatórios", path: "/estoque/relatorios" },
     ],
