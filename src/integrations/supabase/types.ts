@@ -2542,6 +2542,82 @@ export type Database = {
           },
         ]
       }
+      document_access_logs: {
+        Row: {
+          action_type: Database["public"]["Enums"]["access_action"]
+          created_at: string | null
+          document_id: string
+          id: string
+          ip_address: unknown | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action_type: Database["public"]["Enums"]["access_action"]
+          created_at?: string | null
+          document_id: string
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action_type?: Database["public"]["Enums"]["access_action"]
+          created_at?: string | null
+          document_id?: string
+          id?: string
+          ip_address?: unknown | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_access_logs_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_approvals: {
+        Row: {
+          approved_at: string | null
+          approver_id: string
+          comments: string | null
+          created_at: string | null
+          document_id: string
+          id: string
+          status: Database["public"]["Enums"]["approval_status"] | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approver_id: string
+          comments?: string | null
+          created_at?: string | null
+          document_id: string
+          id?: string
+          status?: Database["public"]["Enums"]["approval_status"] | null
+        }
+        Update: {
+          approved_at?: string | null
+          approver_id?: string
+          comments?: string | null
+          created_at?: string | null
+          document_id?: string
+          id?: string
+          status?: Database["public"]["Enums"]["approval_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_approvals_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_events: {
         Row: {
           company_id: string
@@ -2587,6 +2663,104 @@ export type Database = {
           },
         ]
       }
+      document_folders: {
+        Row: {
+          access_level:
+            | Database["public"]["Enums"]["document_access_level"]
+            | null
+          company_id: string
+          created_at: string | null
+          created_by: string
+          description: string | null
+          id: string
+          name: string
+          parent_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          access_level?:
+            | Database["public"]["Enums"]["document_access_level"]
+            | null
+          company_id: string
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          id?: string
+          name: string
+          parent_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          access_level?:
+            | Database["public"]["Enums"]["document_access_level"]
+            | null
+          company_id?: string
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          id?: string
+          name?: string
+          parent_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_folders_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "document_folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_permissions: {
+        Row: {
+          created_at: string | null
+          department_id: string | null
+          document_id: string | null
+          folder_id: string | null
+          granted_by: string
+          id: string
+          permission_type: Database["public"]["Enums"]["permission_type"]
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          department_id?: string | null
+          document_id?: string | null
+          folder_id?: string | null
+          granted_by: string
+          id?: string
+          permission_type: Database["public"]["Enums"]["permission_type"]
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          department_id?: string | null
+          document_id?: string | null
+          folder_id?: string | null
+          granted_by?: string
+          id?: string
+          permission_type?: Database["public"]["Enums"]["permission_type"]
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_permissions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_permissions_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "document_folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_templates: {
         Row: {
           company_id: string
@@ -2625,6 +2799,118 @@ export type Database = {
           variables?: string[]
         }
         Relationships: []
+      }
+      document_versions: {
+        Row: {
+          changes_description: string | null
+          created_at: string | null
+          document_id: string
+          file_path: string
+          id: string
+          uploaded_by: string
+          version_number: number
+        }
+        Insert: {
+          changes_description?: string | null
+          created_at?: string | null
+          document_id: string
+          file_path: string
+          id?: string
+          uploaded_by: string
+          version_number: number
+        }
+        Update: {
+          changes_description?: string | null
+          created_at?: string | null
+          document_id?: string
+          file_path?: string
+          id?: string
+          uploaded_by?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_versions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          access_level:
+            | Database["public"]["Enums"]["document_access_level"]
+            | null
+          category: Database["public"]["Enums"]["document_category"] | null
+          company_id: string
+          created_at: string | null
+          description: string | null
+          expires_at: string | null
+          file_path: string
+          file_size: number | null
+          file_type: string | null
+          folder_id: string | null
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["document_status"] | null
+          tags: string[] | null
+          updated_at: string | null
+          uploaded_by: string
+          version: number | null
+        }
+        Insert: {
+          access_level?:
+            | Database["public"]["Enums"]["document_access_level"]
+            | null
+          category?: Database["public"]["Enums"]["document_category"] | null
+          company_id: string
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          file_path: string
+          file_size?: number | null
+          file_type?: string | null
+          folder_id?: string | null
+          id?: string
+          name: string
+          status?: Database["public"]["Enums"]["document_status"] | null
+          tags?: string[] | null
+          updated_at?: string | null
+          uploaded_by: string
+          version?: number | null
+        }
+        Update: {
+          access_level?:
+            | Database["public"]["Enums"]["document_access_level"]
+            | null
+          category?: Database["public"]["Enums"]["document_category"] | null
+          company_id?: string
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          file_path?: string
+          file_size?: number | null
+          file_type?: string | null
+          folder_id?: string | null
+          id?: string
+          name?: string
+          status?: Database["public"]["Enums"]["document_status"] | null
+          tags?: string[] | null
+          updated_at?: string | null
+          uploaded_by?: string
+          version?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "document_folders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       employee_benefits: {
         Row: {
@@ -10037,6 +10323,8 @@ export type Database = {
       }
     }
     Enums: {
+      access_action: "view" | "download" | "edit" | "delete" | "upload"
+      approval_status: "pending" | "approved" | "rejected"
       benefit_type:
         | "vale_refeicao"
         | "vale_transporte"
@@ -10059,6 +10347,21 @@ export type Database = {
         | "outro"
       default_risk_level: "low" | "medium" | "high" | "critical"
       department_role: "supervisor" | "agent" | "observer"
+      document_access_level:
+        | "public"
+        | "departmental"
+        | "private"
+        | "confidential"
+      document_category:
+        | "contracts"
+        | "invoices"
+        | "receipts"
+        | "hr"
+        | "legal"
+        | "technical"
+        | "financial"
+        | "other"
+      document_status: "active" | "archived" | "expired" | "pending_approval"
       employee_status: "ativo" | "inativo" | "demitido" | "afastado" | "ferias"
       gamification_event_type:
         | "proposta_enviada"
@@ -10099,6 +10402,7 @@ export type Database = {
         | "debit_card"
         | "bank_transfer"
       payment_status: "pending" | "paid" | "overdue" | "cancelled" | "partial"
+      permission_type: "view" | "edit" | "delete" | "admin"
       project_priority: "low" | "medium" | "high" | "urgent"
       project_status:
         | "planning"
@@ -10266,6 +10570,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      access_action: ["view", "download", "edit", "delete", "upload"],
+      approval_status: ["pending", "approved", "rejected"],
       benefit_type: [
         "vale_refeicao",
         "vale_transporte",
@@ -10290,6 +10596,23 @@ export const Constants = {
       ],
       default_risk_level: ["low", "medium", "high", "critical"],
       department_role: ["supervisor", "agent", "observer"],
+      document_access_level: [
+        "public",
+        "departmental",
+        "private",
+        "confidential",
+      ],
+      document_category: [
+        "contracts",
+        "invoices",
+        "receipts",
+        "hr",
+        "legal",
+        "technical",
+        "financial",
+        "other",
+      ],
+      document_status: ["active", "archived", "expired", "pending_approval"],
       employee_status: ["ativo", "inativo", "demitido", "afastado", "ferias"],
       gamification_event_type: [
         "proposta_enviada",
@@ -10335,6 +10658,7 @@ export const Constants = {
         "bank_transfer",
       ],
       payment_status: ["pending", "paid", "overdue", "cancelled", "partial"],
+      permission_type: ["view", "edit", "delete", "admin"],
       project_priority: ["low", "medium", "high", "urgent"],
       project_status: [
         "planning",
