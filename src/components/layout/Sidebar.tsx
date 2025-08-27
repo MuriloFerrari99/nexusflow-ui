@@ -13,7 +13,8 @@ import {
   Menu,
   X,
   UserCheck,
-  FolderOpen
+  FolderOpen,
+  ShoppingCart
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -117,6 +118,20 @@ const menuItems = [
       { title: "Tributação", path: "/fiscal" },
       { title: "Auditoria", path: "/fiscal" },
       { title: "Configurações", path: "/fiscal" },
+    ],
+  },
+  {
+    title: "Compras",
+    icon: ShoppingCart,
+    path: "/compras",
+    badge: "novo",
+    subItems: [
+      { title: "Requisições", path: "/compras" },
+      { title: "RFQ/Cotações", path: "/compras" },
+      { title: "Pedidos", path: "/compras" },
+      { title: "Recebimento", path: "/compras" },
+      { title: "Reposição", path: "/compras" },
+      { title: "Fornecedores", path: "/compras" },
     ],
   },
 ];
